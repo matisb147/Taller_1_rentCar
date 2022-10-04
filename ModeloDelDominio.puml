@@ -1,0 +1,54 @@
+@startuml
+hide empty members
+
+entity Cliente{
+nombre
+apellido
+rut
+email
+tipo de cliente
+fecha ultimo arriendo
+riesgo
+empresa
+}
+
+entity Vehiculo{
+marca
+modelo
+anio
+tipo de vehiculo
+patente
+kilometraje
+cantidad de puertas
+fecha de la ultima revision tecnica
+precio base
+}
+
+entity Contrato{
+rut del cliente
+patente del vehiculo
+fecha de arriendo
+fecha de devolucion
+fecha de devolucion efectiva
+estado actual del arriendo
+costo del arriendo
+atraso
+}
+
+entity Estadistica{
+}
+
+Cliente "1" -- "1..*" Contrato : > tiene
+
+Contrato "1" -- "1" Vehiculo : > contiene
+
+note "El sistema despliega un submenú con las siguientes estadisticas: \n*Cliente con mayor cantidad de arriendos puntuales terminados. \n*Vehículo que más veces ha sido arrendado. \n*Empresa que menos arriendos ha terminado de manera puntual." as N1
+
+N1..Estadistica
+
+note "Un cliente no puede tener un vehiculo sin un contrato efectivo." as N2
+
+Cliente..N2
+N2..Vehiculo
+
+@enduml

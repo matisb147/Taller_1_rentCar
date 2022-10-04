@@ -1,0 +1,169 @@
+@startuml
+
+skinparam linetype ortho
+left to right direction
+hide empty members
+
+class Cliente{
+-nombre:String
+-apellido:String
+-rut:String
+-email:String
+-contrasenia: String
+-tipoCliente:String
+-ultimoContrato:Contrato
+-esDeRiesgo:boolean
+-empresa: String
+
++Cliente(nombre:String, apellido:String, rut:String , email:String , contrasenia:String, tipoCliente:String, esDeRiesgo:boolean)
++Cliente(nombre:String, apellido:String, rut:String , email:String , contrasenia:String, tipoCliente:String, esDeRiesgo:boolean, empresa:String)
++getNombre():String
++getApellido():String
++getRut():String
++getEmail():String
++getContrasenia():String
++getTipoCliente():String
++getUltimoContrato():Contrato
++getEsDeRiesgo():boolean
++getEmpresa():String
++setUltimoContrato():void
++setContrasenia():void
++setTipoCliente():void
++setEmpresa():void
++setEsDeRiesgo():void
+}
+
+class ListaClientes{
+-clientes:Cliente[]
+-cantMaxima:int
+-cantActual:int
+
++ListaClientes(cantMaxima: int)
++buscar(rut: String): int
++buscar(nombre: String): int
++obtener(posicion: int): Cliente
++agregar(cliente: Cliente): boolean
++eliminar(rut: String): boolean
++eliminar(nombre: String): boolean
++getCantMaxima(): int
++getCantActual(): int
++metodoParaEstadisticas():String[]
+}
+
+class Vehiculo{
+-marca:String
+-modelo:String
+-anio:String
+-tipoDeVehiculo:int
+-patente:String
+-kilometraje:int
+-cantidadDePuertas:int
+-ultimaRevisionTecnica:String
+-precioBase:int
+
++Vehiculo(marca:String ,modelo:String ,anio:int ,patente:String ,patente:String ,kilometraje:int ,cantidadDePuertas:int ,tipoDeVehiculo:String ,precioBase:int ,ultimaRevisionTecnica:String)
++getMarca():String
++getModelo():String
++getAnio():String
++getPatente():String
++getKilometraje():String
++getCantidadDePuertas():int
++getTipoDeVehiculo():String
++getPrecioBase():String
++getUltimaRevision():String
++setKilometraje():void
++setPrecioBase():void
++setUltimaRevisionTecnica():void
+}
+
+class ListaVehiculos{
+-vehiculos:Vehiculo[]
+-cantMaxima:int
+-cantActual:int
+
++ListaVehiculos(cantMaxima: int)
++getCantMaxima():int
++getCantActual():int
++buscar(patente: String): int
++buscar(marca:String, modelo:String): int
++buscar(patente:String, marca:String,modelo:String): int
++obtener(posicion: int): Vehiculo
++agregar(vehiculo: Vehiculo): boolean
++eliminar(patente: String): boolean
++metodoParaEstadisticas():String[]
+}
+
+class Contrato{
+-rutCliente: String
+-patenteVehiculo: String
+-fechaArriendo: String
+-fechaDevolucion: String
+-fechaDevolucionEfectiva :String
+-estadoArriendo: String
+-costoArriendo: String
+-atraso: String
+-cliente: Cliente
+-vehiculo: Vehiculo
+
++Contrato(cliente: Cliente, tipoCliente: String, fechaDeArriendo: String, vehiculo: Vehiculo, fechaDevolucion: String);
++getNombreDelCliente(): String
++getTipoCliente(): String
++getFechaDeArriendo(): String
++getPatenteVehiculoArrendado(): String
++getFechaDevolucion(): String
+}
+
+class ListaContratos{
+-contratos:Contrato[]
+-cantMaxima:int
+-cantActual:int
+
++ListaContratos(cantMaxima: int)
++getCantActual(): int
++getCantMaxima(): int
++agregar(contrato:Contrato): boolean
++obtener(posicion:int): Contrato
++buscar(rut:String):int
++buscar(patente:String):int
++buscar(estadoArriendo:String):int
++buscar(estadoArriendo:String,atraso:String):int
++metodoParaEstadisticas():String[]
+}
+
+class SistemaArriendoImplementadora{
+-listaClientes: ListaCliente
+-listaVehiculos: ListaVehiculos
+-listaContratos: ListaContratos
+
++SistemaArriendos()
+}
+
+interface SistemaArriendos <<interface>>{
++iniciarSesion(String rut,String contrasenia):void
++realizarArriendo(patente:String):String
++devolverVehiculo():boolean
++consultarDatos():void
++verVehiculosDisponibles(filtro:int):String[]
++registrarVehiculo(marca:String,modelo:String,anio:int,patente:String,kilometraje:String,cantidadDePuertas:int,tipoDeVehiculo:String,precioBase:int,ultimaRevisionTecnica:String):boolean
++registrarCliente(nombre:String, apellido:String, rut:String , email:String , contrasenia:String, tipoCliente:String, esDeRiesgo:boolean):boolean
++registrarClienteEmpresa(nombre:String, apellido:String, rut:String , email:String , contrasenia:String, tipoCliente:String, esDeRiesgo:boolean, empresa:String):boolean
++salir():void
++desplegarEstadisticas():String[]
+}
+
+ListaClientes "*" *--> Cliente: contiene >
+ListaContratos "*" *-->Contrato: contiene >
+ListaVehiculos "*" *-->  Vehiculo: contiene >
+SistemaArriendoImplementadora ..|> SistemaArriendos: implementa >
+SistemaArriendoImplementadora "1" --> "1" ListaClientes: administra >
+SistemaArriendoImplementadora "1" --> "1" ListaVehiculos: administra >
+SistemaArriendoImplementadora "1" --> "1" ListaContratos: administra >
+Cliente "1"--> "1..*" Contrato: tiene >
+Contrato "1"--> "1" Vehiculo: contiene >
+Cliente "1" --> "1" Vehiculo: arrienda >
+
+note "Un cliente no puede tener un vehiculo sin un contrato efectivo" as N1
+Cliente..N1
+N1..Vehiculo
+
+@enduml
